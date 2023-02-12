@@ -1,0 +1,36 @@
+mydata<-read.delim(file.choose(), header=T)
+y<- mydata$y
+x3<- mydata$x3
+x10<- mydata$x10
+x11<- mydata$x11
+x12<- mydata$x12
+x16<- mydata$x16
+install.packages('pscl') 
+library(pscl)
+install.packages('MASS') 
+library('MASS')
+Claim=data.frame(y=y,x3=x3,x10=x10,x11=x11,x12=x12, x16=x16)
+
+## Hurdle Poisson##
+hurp=hurdle(y~x3+x10+x11+x12+x16,
+           Claim,
+           dist = c("poisson"),
+           zero.dist = c("binomial"),
+           link = c("logit"))
+
+summary(hurp)
+AIC(hurp)
+BIC(hurp)
+
+## Hurdle negative binomial ##
+hurneg=hurdle(y~x3+x10+x11+x12+x16,
+              Claim,
+              dist = c("negbin"),
+              zero.dist = c("binomial"),
+              link = c("logit"))
+summary(hurneg)
+AIC(hurneg)
+BIC(hurneg)
+
+
+#####
